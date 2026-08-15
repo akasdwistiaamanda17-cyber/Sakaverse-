@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sakaverse V13.2</title>
+<title>Sakaverse V13.1</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#080c11;color:#f5f7fa;font-family:Inter,Arial,sans-serif}
@@ -47,21 +47,19 @@ body{margin:0;background:#080c11;color:#f5f7fa;font-family:Inter,Arial,sans-seri
 .score{width:92px;height:92px;border-radius:50%;border:7px solid #293540;display:grid;place-items:center;font-size:24px;font-weight:900}
 .metric{font-size:10px;padding:7px 0;border-bottom:1px solid #27313b}.metric:last-child{border:0}
 .pill{font-size:8px;padding:4px 7px;border-radius:10px;background:#202b36}
-</style>
+.trade-choice{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 10px}
+.trade-choice button{border:1px solid #2d3945;border-radius:12px;padding:12px;font-weight:900;background:#151c25;color:#aeb9c4;cursor:pointer}
+.trade-choice button.active-profit{background:#163326;color:#63d79a;border-color:#2d7651}
+.trade-choice button.active-loss{background:#3a2228;color:#ff8f9a;border-color:#7a3d48}
+.trade-pnl{font-size:28px;font-weight:950;letter-spacing:-.5px;margin:4px 0}
+.trade-status{font-size:10px;font-weight:800}
 
-<meta name="theme-color" content="#0b1220">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Sakaverse">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
-<style>html,body{overscroll-behavior-y:none}body{-webkit-tap-highlight-color:transparent}button,input,select,textarea{font-size:16px}</style>
+</style>
 </head>
 <body>
 <div class="app">
 <div class="top">
-  <div><div class="brand">SAKAVERSE</div><div class="muted">V13.2 • PERSONAL FINANCE OS</div></div>
+  <div><div class="brand">SAKAVERSE</div><div class="muted">V13.1 • PERSONAL FINANCE OS</div></div>
   <div class="avatar">S</div>
 </div>
 
@@ -82,6 +80,7 @@ body{margin:0;background:#080c11;color:#f5f7fa;font-family:Inter,Arial,sans-seri
   <div class="section"><h3>Quick Action</h3><span class="muted">Setiap aktivitas punya jalur sendiri</span></div>
   <div class="grid">
     <div class="action" onclick="openIncome()"><div class="ico">💼</div><b>Income</b><small>Gaji • Profit Trading • Affiliate • Lainnya</small></div>
+    <div class="action" onclick="setStartingBalance()"><div class="ico">🏁</div><b>Saldo Awal</b><small>Atur Net Worth awal</small></div>
     <div class="action" onclick="openTx('expense')"><div class="ico">💸</div><b>Expense</b><small>Pengeluaran harian</small></div>
     <div class="action" onclick="openTx('trade')"><div class="ico">📈</div><b>Trading P/L</b><small>Catat hasil trading</small></div>
     <div class="action" onclick="openTx('debt')"><div class="ico">💳</div><b>Debt Payment</b><small>Bayar hutang / cicilan</small></div>
@@ -136,7 +135,10 @@ body{margin:0;background:#080c11;color:#f5f7fa;font-family:Inter,Arial,sans-seri
 <div id="tradingPage" class="page">
   <div class="section"><h3>Trading</h3><span class="muted">Profit & Loss</span></div>
   <div class="card">
-    <div class="line"><span>Total P/L</span><b id="tradeTotal">Rp 0</b></div>
+    <div class="label">CURRENT P/L</div>
+    <div id="tradePnl" class="trade-pnl">Rp 0</div>
+    <div id="tradeStatus" class="trade-status muted">Belum ada hasil trading</div>
+    <div class="line" style="margin-top:12px"><span>Total P/L</span><b id="tradeTotal">Rp 0</b></div>
     <div class="line"><span>Winning trades</span><b class="green" id="wins">0</b></div>
     <div class="line"><span>Losing trades</span><b class="red" id="losses">0</b></div>
     <div class="line"><span>Win rate</span><b id="winRate">0%</b></div>
@@ -159,11 +161,11 @@ body{margin:0;background:#080c11;color:#f5f7fa;font-family:Inter,Arial,sans-seri
 <div id="morePage" class="page">
   <div class="section"><h3>Account & Backup</h3></div>
   <div class="card">
-    <b style="font-size:12px">Sakaverse V13.2 Scope</b>
-    <div class="money">Sakaverse mengelola cashflow, income, expense, trading P/L, debt payment, dan goal fund dengan alokasi Cash ↔ Goal yang konsisten. Investment/exchange tetap berada di luar aplikasi. Instalasi baru selalu dimulai dari Net Worth Rp 0.</div>
+    <b style="font-size:12px">Sakaverse V13.1 Scope</b>
+    <div class="money">Sakaverse mengelola cashflow, income, expense, trading P/L, debt payment, dan goal fund. Investment/exchange tetap berada di luar aplikasi. Instalasi baru selalu dimulai dari Net Worth Rp 0.</div>
   </div>
   <div class="card">
-    <div class="money">V13.2 fokus pada cashflow, trading, hutang, dan goals. Investment sengaja tidak dikelola di aplikasi karena investasi/exchange dilakukan di luar Sakaverse. Data layer tetap siap untuk authentication + cloud database.</div>
+    <div class="money">V12 fokus pada cashflow, trading, hutang, dan goals. Investment sengaja tidak dikelola di aplikasi karena investasi/exchange dilakukan di luar Sakaverse. Data layer tetap siap untuk authentication + cloud database.</div>
     <button class="btn" onclick="exportData()">Export Backup</button>
     <button class="btn secondary" onclick="document.getElementById('file').click()">Import Backup</button>
     <button class="btn danger" onclick="resetData()">Reset Data</button>
@@ -210,6 +212,10 @@ body{margin:0;background:#080c11;color:#f5f7fa;font-family:Inter,Arial,sans-seri
 <option value="debt">Debt Payment</option>
 <option value="goal">Goal Fund</option>
 </select>
+<div id="tradeChoice" class="trade-choice" style="display:none">
+  <button type="button" id="profitBtn" onclick="setTradeResult('profit')">▲ PROFIT</button>
+  <button type="button" id="lossBtn" onclick="setTradeResult('loss')">▼ LOSS</button>
+</div>
 <input id="name" placeholder="Nama / kategori">
 <input id="amount" type="number" step="1" placeholder="Nominal (Rp)">
 <input id="date" type="date">
@@ -221,19 +227,18 @@ body{margin:0;background:#080c11;color:#f5f7fa;font-family:Inter,Arial,sans-seri
 </div>
 
 <script>
-const empty={cash:0,investment:0,debtTotal:0,debtPaid:0,wedding:0,weddingTarget:0,goals:[],tx:[],version:13.2};
-let db=JSON.parse(localStorage.getItem('sakaverse_v13_2')||'null');
-if(!db){ const old=JSON.parse(localStorage.getItem('sakaverse_v13_3')||localStorage.getItem('sakaverse_v13_2')||localStorage.getItem('sakaverse_v13_1')||'null'); if(old) db=old; }
+const empty={cash:0,investment:0,debtTotal:0,debtPaid:0,wedding:0,weddingTarget:0,goals:[],tx:[],version:13.1};
+let db=JSON.parse(localStorage.getItem('sakaverse_v13_1')||'null');
 
 function migrate(){
   if(db&&Array.isArray(db.tx)){
-    db={...empty,...db,version:13.2};
+    db={...empty,...db,version:13.1};
     db.investment=0;
     if(!Array.isArray(db.goals)) db.goals=[];
     return;
   }
 
-  // Fresh V13.3 install: starting Net Worth must be Rp 0.
+  // Fresh V13.1 install: starting Net Worth must be Rp 0.
   // Do not inherit old V10/V11/V12/V13 cash balances automatically.
   db=JSON.parse(JSON.stringify(empty));
   db.cash=0;
@@ -245,7 +250,7 @@ function migrate(){
   save();
 }
 
-function save(){localStorage.setItem('sakaverse_v13_2',JSON.stringify(db))}
+function save(){localStorage.setItem('sakaverse_v13_1',JSON.stringify(db))}
 function nav(page,el){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById(page).classList.add('active');
@@ -294,13 +299,27 @@ function openTx(k){
   document.getElementById('amount').value='';
   document.getElementById('date').value=today();
   document.getElementById('note').value='';
+  if(k==='trade')setTradeResult('profit');
   updateForm();
 }
 function closeTx(){document.getElementById('modal').style.display='none'}
+let tradeResult='profit';
+function setTradeResult(result){
+  tradeResult=result;
+  document.getElementById('profitBtn').className=result==='profit'?'active-profit':'';
+  document.getElementById('lossBtn').className=result==='loss'?'active-loss':'';
+  document.getElementById('amount').placeholder=result==='profit'?'Nominal Profit (Rp)':'Nominal Loss (Rp)';
+}
+function updateTradeChoice(){
+  let isTrade=document.getElementById('kind').value==='trade';
+  document.getElementById('tradeChoice').style.display=isTrade?'grid':'none';
+  if(isTrade)setTradeResult(tradeResult);
+}
 function updateForm(){
   let k=document.getElementById('kind').value;
   let amount=document.getElementById('amount');
-  amount.placeholder=k==='trade'?'Profit (+) / Loss (-)':'Nominal (Rp)';
+  amount.placeholder=k==='trade'?(tradeResult==='profit'?'Nominal Profit (Rp)':'Nominal Loss (Rp)'):'Nominal (Rp)';
+  updateTradeChoice();
 }
 function incomeName(t){
   if(t==='salary')return'Gaji';
@@ -326,13 +345,17 @@ function saveTx(){
     n=Math.abs(n);
   }else{
     name=document.getElementById('name').value.trim()||k;
-    if(k!=='trade')n=Math.abs(n);
+    if(k==='trade'){
+      n=Math.abs(n)*(tradeResult==='profit'?1:-1);
+      name= name==='trade' ? (tradeResult==='profit'?'Trading Profit':'Trading Loss') : name;
+    }else{
+      n=Math.abs(n);
+    }
   }
 
   let date=document.getElementById('date').value||today();
 
-  if(k==='income') db.cash+=Math.abs(n);
-  if(k==='trade') db.cash+=n;
+  if(k==='income'||k==='trade') db.cash+=n;
   if(k==='expense'||k==='debt') db.cash-=Math.abs(n);
   if(k==='debt') db.debtPaid+=Math.abs(n);
   if(k==='goal'){
@@ -340,11 +363,8 @@ function saveTx(){
     let chosen=prompt('Pilih goal:\n\n'+db.goals.map((g,i)=>(i+1)+'. '+g.name).join('\n'));
     let idx=Number(chosen)-1;
     if(!db.goals[idx])return;
-    let fund=Math.abs(n);
-    if(fund>db.cash)return alert('Cash tidak cukup untuk fund goal.');
-    db.cash-=fund;
-    db.goals[idx].balance+=fund;
-    // Goal funding moves cash into Goal Fund; Net Worth stays unchanged.
+    db.goals[idx].balance+=Math.abs(n);
+    // Goal funding is an internal allocation, not an expense.
   }
 
   db.tx.unshift({
@@ -353,7 +373,7 @@ function saveTx(){
     name,
     amount:n,
     date,
-    note:(k==='goal'&&typeof idx!=='undefined'&&db.goals[idx]?'goal:'+db.goals[idx].id+' • ':'')+document.getElementById('note').value.trim(),
+    note:document.getElementById('note').value.trim(),
     ...(incomeMode?{incomeCategory:document.getElementById('incomeType').value}: {})
   });
   save();closeTx();render();
@@ -400,11 +420,7 @@ function saveGoal(){
   if(editId){
     let g=db.goals.find(x=>x.id===editId);if(!g)return;
     g.name=name;g.target=target;
-    if(initial<g.balance){db.cash+=g.balance-initial;g.balance=initial;}
-    else if(initial>g.balance){let add=initial-g.balance;if(add>db.cash)return alert('Cash tidak cukup untuk menambah saldo goal.');db.cash-=add;g.balance=initial;}
   }else{
-    if(initial>db.cash)return alert('Saldo awal goal melebihi Cash tersedia.');
-    db.cash-=Math.max(0,initial);
     db.goals.push({id:Date.now(),name,target,balance:Math.max(0,initial)});
   }
   save();closeGoalModal();render();
@@ -421,7 +437,7 @@ function setup(){manageGoals()}
 function exportData(){
   let a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));
-  a.download='sakaverse-v13.2-backup.json';a.click();
+  a.download='sakaverse-v11-backup.json';a.click();
 }
 function importData(e){
   let file=e.target.files[0];if(!file)return;
@@ -431,32 +447,23 @@ function importData(e){
       let x=JSON.parse(r.result);
       if(!Array.isArray(x.tx))throw 0;
       x.tx=x.tx.filter(t=>t&&t.id&&t.type&&t.date&&Number.isFinite(Number(t.amount)));
-      db={...empty,...x,version:13.3};
+      db={...empty,...x,version:13.1};
       db.cash=Number(db.cash)||0;
       db.debtTotal=Number(db.debtTotal)||0;
       db.debtPaid=Number(db.debtPaid)||0;
       db.wedding=Number(db.wedding)||0;
       db.weddingTarget=Number(db.weddingTarget)||0;
-      save();render();alert('Backup berhasil diimport.');
+      save();render();alert('Backup V12 berhasil diimport.');
     }catch(_){alert('Backup tidak valid.')}
     e.target.value='';
   };
   r.readAsText(file);
 }
 function resetData(){
-  if(confirm('RESET SAKAVERSE V13.2? Semua transaksi, progress hutang, dan goal fund akan dihapus dari perangkat ini.')){
+  if(confirm('RESET SAKAVERSE V13.1? Semua transaksi, progress hutang, dan goal fund akan dihapus dari perangkat ini.')){
     db=JSON.parse(JSON.stringify(empty));save();render();
   }
 }
-function f(n){
-  return 'Rp '+Number(n||0).toLocaleString('id-ID');
-}
-function today(){
-  let d=new Date();
-  let y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
-  return y+'-'+m+'-'+day;
-}
-
 function months(){
   let set=new Set(db.tx.filter(x=>x.type!=='investment').map(x=>x.date.slice(0,7)));
   let now=today().slice(0,7);set.add(now);
@@ -534,12 +541,7 @@ function delTx(id){
   if(x.type==='income'||x.type==='trade')db.cash-=x.amount;
   if(x.type==='expense'||x.type==='debt')db.cash+=Math.abs(x.amount);
     if(x.type==='debt')db.debtPaid-=Math.abs(x.amount);
-  if(x.type==='goal'){
-    let gid=String(x.note||'').match(/^goal:(\d+)/)?.[1];
-    let g=db.goals.find(g=>String(g.id)===gid);
-    if(g) g.balance=Math.max(0,g.balance-Math.abs(x.amount));
-    db.cash+=Math.abs(x.amount);
-  }
+  if(x.type==='goal')db.wedding-=Math.abs(x.amount);
   db.tx=db.tx.filter(t=>t.id!==id);save();render();
 }
 function formatDashboardDate(){
@@ -554,7 +556,8 @@ function render(){
 
   let a=db.tx.filter(x=>x.type!=='investment'), m=calc(a.filter(x=>x.date.slice(0,7)===mf.value));
   document.getElementById('dashboardDate').textContent=formatDashboardDate();
-  document.getElementById('net').textContent=f(Number(db.cash||0)+db.goals.reduce((s,g)=>s+Number(g.balance||0),0));
+  document.getElementById('net').textContent=f(db.cash);
+  document.getElementById('cash').textContent=f(db.cash);
   document.getElementById('cash').textContent=f(db.cash);
   document.getElementById('income').textContent=f(m.inc);
   document.getElementById('expense').textContent=f(m.exp);
@@ -579,7 +582,7 @@ function render(){
   let all=calc(a);
   document.getElementById('cfIncome').textContent=f(all.inc);
   document.getElementById('cfExpense').textContent=f(all.exp);
-  let net=all.inc+all.tr-all.exp-all.debt;
+  let net=all.inc+all.tr-all.exp-all.debt-0-all.goal;
   document.getElementById('cfNet').textContent=(net>=0?'+':'-')+f(Math.abs(net));
   document.getElementById('cfNet').className=net>=0?'green':'red';
   document.getElementById('allActivity').innerHTML=a.map(x=>item(x)).join('')||'<div class="empty">Belum ada transaksi.</div>';
@@ -588,6 +591,16 @@ function render(){
   let total=trades.reduce((s,x)=>s+x.amount,0);
   document.getElementById('tradeTotal').textContent=(total>0?'+':total<0?'-':'')+f(Math.abs(total));
   document.getElementById('tradeTotal').className=total>=0?'green':'red';
+  let lastTrade=trades[0];
+  let pnl=document.getElementById('tradePnl');
+  let status=document.getElementById('tradeStatus');
+  if(!lastTrade){
+    pnl.textContent='Rp 0'; pnl.className='trade-pnl'; status.textContent='Belum ada hasil trading'; status.className='trade-status muted';
+  }else if(lastTrade.amount>0){
+    pnl.textContent='▲ +'+f(Math.abs(lastTrade.amount)); pnl.className='trade-pnl green'; status.textContent='PROFIT • Net Worth bertambah'; status.className='trade-status green';
+  }else{
+    pnl.textContent='▼ -'+f(Math.abs(lastTrade.amount)); pnl.className='trade-pnl red'; status.textContent='LOSS • Net Worth berkurang'; status.className='trade-status red';
+  }
   document.getElementById('wins').textContent=wins;
   document.getElementById('losses').textContent=losses;
   document.getElementById('winRate').textContent=trades.length?Math.round(wins/trades.length*100)+'%':'0%';
@@ -595,6 +608,5 @@ function render(){
 }
 migrate();render();updateForm();
 </script>
-<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>
 </body>
 </html>

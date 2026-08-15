@@ -1,1 +1,1 @@
-Sakaverse Web V1.0. Buka index.html. Untuk PWA/offline penuh, host folder ini di HTTPS lalu pilih Add to Home screen di Chrome Android.
+Sakaverse Web Trading V1.1
